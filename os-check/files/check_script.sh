@@ -1,17 +1,3 @@
-#!/bin/bash
-
-
-######################################################################################################
-# Environmental configuration
-######################################################################################################
-
-export PATH=$PATH:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/root/bin
-
-
-######################################################################################################
-# Define globle variable
-######################################################################################################
-
 system_facts=''
 cpu_facts=''
 mem_facts=''
@@ -21,13 +7,8 @@ network_facts=''
 bad=''
 critical=''
 
-bad_threshold=80
+bad_threshold=70
 critical_threshold=90
-
-
-######################################################################################################
-# Define function
-######################################################################################################
 
 function check_used() {
   # Kritik, Kötü  durum ayırt edici
@@ -48,7 +29,7 @@ function check_used() {
 
 
 function get_system() {
-  # 获取系统信息
+  # Sistem bilgilerini alma
 
   hostname=$(hostname 2>/dev/null)
   fqdn=$(hostname -f 2>/dev/null)
@@ -80,7 +61,7 @@ EOF
 
 
 function get_cpu() {
-  # 获取cpu使用信息
+  # İşlemci kullanım bilgilerini alma
 
   cpu_usedutilization=$(cat <(grep 'cpu ' /proc/stat) <(sleep 1 && grep 'cpu ' /proc/stat) | awk -v RS="" '{printf ("%.2f\n", ($13-$2+$15-$4)*100/($13-$2+$15-$4+$16-$5))}')
   cpu_loadavg1=$(awk '{print $1}' /proc/loadavg)
@@ -239,10 +220,5 @@ EOF
   echo ${check_facts:-[]}
 
 }
-
-
-######################################################################################################
-# main 
-######################################################################################################
 
 main
